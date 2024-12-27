@@ -5,7 +5,11 @@ if [ -z "$GIT_URL" ] || [ -z "$GIT_TOKEN" ] || [ -z "$BUILD_COMMAND" ] || [ -z "
   echo "!> Required environment variables: GIT_URL, GIT_TOKEN, BUILD_COMMAND, RUN_COMMAND"
   exit 1
 fi
-
+# Remove the repo directory if it already exists
+if [ -d "repo" ]; then
+  echo ">> Removing existing repository directory..."
+  rm -rf repo
+fi
 echo ">> Cloning repository..."
 git clone https://$GIT_TOKEN@$GIT_URL repo || exit 1
 
