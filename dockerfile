@@ -1,6 +1,8 @@
 # Base image
 FROM node:18-alpine
 
+RUN apk add g++ make py3-pip
+
 # Set working directory
 WORKDIR /app
 
