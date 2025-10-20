@@ -18,7 +18,7 @@ WORKDIR /app
 # Install necessary tools
 RUN apk add --no-cache git
 
-RUN npm i -g pnpm yarn
+RUN npm i -g pnpm
 
 RUN git config --global http.postBuffer 524288000
 
