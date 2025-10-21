@@ -1,5 +1,8 @@
 #!/bin/sh
 
+node -v
+npm -v
+
 # Check if required environment variables are set
 if [ -z "$GIT_URL" ] || [ -z "$GIT_TOKEN" ] || [ -z "$BUILD_COMMAND" ] || [ -z "$RUN_COMMAND" ]; then
   echo "!> Required environment variables: GIT_URL, GIT_TOKEN, BUILD_COMMAND, RUN_COMMAND"
