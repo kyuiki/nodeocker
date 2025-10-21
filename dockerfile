@@ -1,6 +1,7 @@
 # Base image
 FROM node:18-alpine
 
+# Add network reliability fixes
 RUN apk add --update --no-cache \
     make \
     g++ \
@@ -10,23 +11,25 @@ RUN apk add --update --no-cache \
     pango-dev \
     libtool \
     autoconf \
-    automake
+    automake \
+    ca-certificates
 
-# Set working directory
 WORKDIR /app
 
-# Install necessary tools
 RUN apk add --no-cache git
 
 RUN npm i -g pnpm
 
-RUN git config --global http.postBuffer 524288000
+RUN git config --global http.postBuffer 524288000 && \
+    git config --global http.lowSpeedLimit 1000 && \
+    git config --global http.lowSpeedTime 600 && \
+    git config --global core.compression 0
 
-RUN npm config set fetch-retries 5
+RUN npm config set fetch-retries 5 && \
+    npm config set fetch-retry-mintimeout 20000 && \
+    npm config set fetch-retry-maxtimeout 120000
 
-# Copy the script to handle environment variables
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# Define entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
