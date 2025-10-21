@@ -1,33 +1,29 @@
-# Base image
-FROM node:18-alpine
+#base image
+FROM node:20-slim
 
-# Add network reliability fixes
-RUN apk add --update --no-cache \
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
     make \
     g++ \
-    jpeg-dev \
-    cairo-dev \
-    giflib-dev \
-    pango-dev \
+    libjpeg-dev \
+    libcairo2-dev \
+    libgif-dev \
+    libpango1.0-dev \
     libtool \
     autoconf \
     automake \
-    ca-certificates
+    git \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
+# Set working directory
 WORKDIR /app
-
-RUN apk add --no-cache git
 
 RUN npm i -g pnpm
 
-RUN git config --global http.postBuffer 524288000 && \
-    git config --global http.lowSpeedLimit 1000 && \
-    git config --global http.lowSpeedTime 600 && \
-    git config --global core.compression 0
+RUN git config --global http.postBuffer 524288000
 
-RUN npm config set fetch-retries 5 && \
-    npm config set fetch-retry-mintimeout 20000 && \
-    npm config set fetch-retry-maxtimeout 120000
+RUN npm config set fetch-retries 5
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
