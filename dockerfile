@@ -20,6 +20,13 @@ RUN apt-get update && apt-get install -y \
 # Set working directory
 WORKDIR /app
 
+# curl-impersonate (Chrome TLS/JA3 fingerprint to pass Cloudflare)
+RUN ARCH=$(dpkg --print-architecture | sed 's/amd64/x86_64/;s/arm64/aarch64/') && \
+    curl -L "https://github.com/lexiforest/curl-impersonate/releases/latest/download/curl-impersonate-chrome-linux-${ARCH}.tar.gz" \
+      -o /tmp/ci.tar.gz && \
+    tar -xzf /tmp/ci.tar.gz -C /usr/local/bin && rm /tmp/ci.tar.gz && \
+    chmod +x /usr/local/bin/curl-impersonate*
+
 RUN npm i -g pnpm
 
 RUN git config --global http.postBuffer 524288000
