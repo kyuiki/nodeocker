@@ -21,11 +21,12 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # curl-impersonate (Chrome TLS/JA3 fingerprint to pass Cloudflare)
+ENV CURL_IMPERSONATE_VERSION=1.5.6
 RUN ARCH=$(dpkg --print-architecture | sed 's/amd64/x86_64/;s/arm64/aarch64/') && \
-    curl -L "https://github.com/lexiforest/curl-impersonate/releases/latest/download/curl-impersonate-chrome-linux-${ARCH}.tar.gz" \
+    curl -fL "https://github.com/lexiforest/curl-impersonate/releases/download/v${CURL_IMPERSONATE_VERSION}/curl-impersonate-v${CURL_IMPERSONATE_VERSION}.${ARCH}-linux-gnu.tar.gz" \
       -o /tmp/ci.tar.gz && \
     tar -xzf /tmp/ci.tar.gz -C /usr/local/bin && rm /tmp/ci.tar.gz && \
-    chmod +x /usr/local/bin/curl-impersonate*
+    chmod +x /usr/local/bin/curl-impersonate /usr/local/bin/curl_*
 
 RUN npm i -g pnpm
 
